@@ -155,8 +155,7 @@ svg {
 
 .text {
   word-spacing: 4px;
-  color: rgba(18, 1, 1, 0.55);
-
+  color: rgba(18, 1, 1, 0.15);
   font-size: 10px;
 
   position: absolute;
@@ -164,4 +163,21 @@ svg {
   z-index: 1;
 
   animation: rotateCircle 10s linear infinite;
+
+  font-weight: 700;
+}
+@layer demo {
+  .text {
+    text-shadow: 0 0.15ch 15px var(--shadow), 0 -1px 0 var(--highlight);
+  }
+}
+
+@layer demo.support {
+  :root {
+    --hue: 320; /* change me */
+    --bg: oklch(35% 0.3 var(--hue));
+    --text: oklch(85% 0.1 var(--hue));
+    --shadow: oklch(25% 0.2 var(--hue));
+    --highlight: oklch(98% 0.05 var(--hue));
+  }
 }
