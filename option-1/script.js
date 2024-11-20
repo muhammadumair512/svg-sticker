@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-  startGradientEffect();
-});
-
 function Marqueertl(selector, speed) {
   const parentSelector = document.querySelector(selector);
   const clone = parentSelector.innerHTML;
@@ -152,53 +148,28 @@ function startGradientEffect() {
 
     // Neon-like shadow effect
     svgElement.style.filter = `
-      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 20px rgba(0, 255, 255, 0.8)) 
-      drop-shadow(${-shadowOffsetX}px ${-shadowOffsetY}px 20px rgba(255, 0, 255, 0.8)) 
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 20px rgba(0, 255, 255, 0.8))
+      drop-shadow(${-shadowOffsetX}px ${-shadowOffsetY}px 20px rgba(255, 0, 255, 0.8))
       drop-shadow(${shadowOffsetY}px ${-shadowOffsetX}px 30px rgba(255, 255, 0, 0.8))
     `;
 
-    // Adjust gradient colors dynamically for vibrant neon effect
+    // Adjust a single gradient color dynamically
     const vibrantColor = (base, offset) =>
       Math.max(0, Math.min(255, base + offset));
 
-    // Using the color palette from the reference CSS
-    const color1 = `rgba(${vibrantColor(
-      255,
-      normalizedX * 100
-    )}, 0, ${vibrantColor(128, normalizedY * 100)}, 1)`; // Neon Magenta
-    const color2 = `rgba(0, ${vibrantColor(
-      255,
-      normalizedY * 100
-    )}, ${vibrantColor(255, -normalizedX * 100)}, 1)`; // Neon Cyan
-    const color3 = `rgba(${vibrantColor(
-      255,
-      normalizedY * 100
-    )}, ${vibrantColor(255, -normalizedX * 100)}, 0, 0.8)`; // Neon Yellow
-    const color4 = `rgba(${vibrantColor(
-      255,
-      -normalizedY * 100
-    )}, 0, ${vibrantColor(255, normalizedX * 100)}, 1)`; // Neon Red
-    const color5 = `rgba(${vibrantColor(
-      255,
-      normalizedX * 100
-    )}, ${vibrantColor(0, -normalizedY * 100)}, 255, 1)`; // Neon Blue
+    // Calculate the color based on the tilt
+    const baseRed = vibrantColor(255, normalizedX * 100);
+    const baseGreen = vibrantColor(255, normalizedY * 100);
+    const baseBlue = vibrantColor(255, -normalizedX * 100);
 
-    gradientElement.children[0].setAttribute("stop-color", color1);
-    gradientElement.children[1].setAttribute("stop-color", color2);
-    gradientElement.children[2].setAttribute("stop-color", color3);
-    gradientElement.children[3].setAttribute("stop-color", color4);
-    gradientElement.children[4].setAttribute("stop-color", color5);
+    const singleColor = `rgba(${baseRed}, ${baseGreen}, ${baseBlue}, 1)`;
 
-    // Neon text pulse effect (Optional, if you want to add neon text like the reference)
-    const neonText = document.querySelector(".neon-text");
-    if (neonText) {
-      neonText.style.textShadow = `
-        0 0 15px ${color1}, 
-        0 0 30px ${color2}, 
-        0 0 40px ${color3}, 
-        0 0 50px ${color4}, 
-        0 0 60px ${color5}`;
-    }
+    // Apply the same color to all gradient stops
+    gradientElement.children[0].setAttribute("stop-color", singleColor);
+    gradientElement.children[1].setAttribute("stop-color", singleColor);
+    gradientElement.children[2].setAttribute("stop-color", singleColor);
+    gradientElement.children[3].setAttribute("stop-color", singleColor);
+    gradientElement.children[4].setAttribute("stop-color", singleColor);
   });
 }
 
