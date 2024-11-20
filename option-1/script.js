@@ -134,86 +134,58 @@ function startMotionHandler(onMotionUpdate) {
 function startGradientEffect() {
   const gradientElements = document.querySelectorAll("#gradient1");
 
-  // Handle motion changes
   startMotionHandler((x, y) => {
-    // Normalize tilt values for smooth transitions
-    const normalizedX = x / 45; // Range [-1, 1]
-    const normalizedY = y / 45; // Range [-1, 1]
+    // Normalize tilt values and scale sensitivity
+    const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Dynamic shadow effect
+    // Adjust shadow for neon glow effect
     const svgElement = document.querySelector("#svglogo");
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 10);
-    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 10);
-    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
 
-    // Calculate color shift based on tilt
-    const shiftFactor = Math.sin(normalizedX + normalizedY) * 100;
-
-    // Base colors for transition (starting colors)
-    const baseColors = [
-      { r: 255, g: 0, b: 100 }, // Pink
-      { r: 255, g: 100, b: 0 }, // Orange
-      { r: 255, g: 255, b: 0 }, // Yellow
-      { r: 0, g: 255, b: 100 }, // Green
-      { r: 0, g: 100, b: 255 }, // Blue
-    ];
-
-    // Calculate a smooth color transition for the current tilt
-    const activeColor =
-      baseColors[
-        Math.floor((shiftFactor / 100) * baseColors.length) % baseColors.length
-      ];
-
-    // Smooth color transition based on tilt
-    const smoothColor = {
-      r: Math.round(activeColor.r + shiftFactor),
-      g: Math.round(activeColor.g + shiftFactor),
-      b: Math.round(activeColor.b + shiftFactor),
+    // Generate dynamic neon color
+    const neonColor = {
+      r: Math.round(255 - normalizedX * 128), // Bright range for red
+      g: Math.round(100 + normalizedY * 155), // Bright range for green
+      b: Math.round(200 + normalizedX * 55), // Bright range for blue
     };
 
-    // Ensure color values stay within the valid range [0, 255]
-    const constrainedColor = {
-      r: Math.max(0, Math.min(255, smoothColor.r)),
-      g: Math.max(0, Math.min(255, smoothColor.g)),
-      b: Math.max(0, Math.min(255, smoothColor.b)),
-    };
+    const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
 
-    // Apply the smooth color to all gradient stops
+    // Apply dynamic neon glow using drop-shadow
+    svgElement.style.filter = `
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
+      drop-shadow(0px 0px 30px ${neonGlowColor}),
+      drop-shadow(0px 0px 50px ${neonGlowColor})
+    `;
+
+    // Apply neon effect to gradient colors dynamically
     gradientElements.forEach((gradientElement) => {
-      // Since we want one single color, set all stops to this color
       gradientElement.children[0].setAttribute(
         "style",
-        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
+        `stop-color: ${neonGlowColor}; stop-opacity: 1;`
       );
-      gradientElement.children[0].setAttribute("offset", "0%");
+      gradientElement.children[0].setAttribute("offset", "10%");
 
       gradientElement.children[1].setAttribute(
         "style",
-        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.8;`
       );
-      gradientElement.children[1].setAttribute("offset", "25%");
+      gradientElement.children[1].setAttribute("offset", "50%");
 
       gradientElement.children[2].setAttribute(
         "style",
-        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
       );
-      gradientElement.children[2].setAttribute("offset", "50%");
-
-      gradientElement.children[3].setAttribute(
-        "style",
-        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
-      );
-      gradientElement.children[3].setAttribute("offset", "75%");
-
-      gradientElement.children[4].setAttribute(
-        "style",
-        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
-      );
-      gradientElement.children[4].setAttribute("offset", "100%");
+      gradientElement.children[2].setAttribute("offset", "90%");
     });
   });
 }
+
+// Call the function to start the neon effect
 
 function calculatePosition(degree, radius) {
   const radians = (degree - 60) * (Math.PI / 180);

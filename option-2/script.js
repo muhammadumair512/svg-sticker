@@ -84,7 +84,7 @@ function startMotionHandler(onMotionUpdate) {
 }
 
 function startGradientEffect() {
-  const neonElements = document.querySelectorAll("#gradient1");
+  const gradientElements = document.querySelectorAll("#gradient1");
 
   startMotionHandler((x, y) => {
     // Normalize tilt values and scale sensitivity
@@ -93,35 +93,87 @@ function startGradientEffect() {
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Neon effect parameters
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    // Adjust shadow for dynamic 3D effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
-    // Dynamic neon color based on tilt
-    const neonColor = {
-      r: Math.round((255 * (1 + normalizedX)) / 2), // Red: stronger with right tilt
-      g: Math.round((255 * (1 + normalizedY)) / 2), // Green: stronger with upward tilt
-      b: 255, // Fixed blue for a neon blue base
+    // Smooth gradient stop offsets
+    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 20));
+    const offset2 = Math.min(100, Math.max(0, 30 + normalizedY * 20));
+    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 20));
+    const offset4 = Math.min(100, Math.max(0, 70 + normalizedY * 20));
+    const offset5 = 100;
+
+    // Improved color interpolation using sinusoidal and blended smoothing
+    const blendFactor = (val1, val2, weight) =>
+      Math.round(val1 * (1 - weight) + val2 * weight);
+
+    const color1 = {
+      r: blendFactor(228, 255, Math.abs(normalizedX)),
+      g: blendFactor(14, 128, Math.abs(normalizedY)),
+      b: blendFactor(14, 200, Math.abs(normalizedX)),
     };
 
-    const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 1)`;
-    const shadowGlow = `${shadowOffsetX}px ${shadowOffsetY}px 20px ${neonGlowColor}, 0px 0px 30px ${neonGlowColor}`;
+    const color2 = {
+      r: blendFactor(9, 128, Math.abs(normalizedY)),
+      g: blendFactor(235, 200, Math.abs(normalizedX)),
+      b: blendFactor(156, 220, Math.abs(normalizedY)),
+    };
 
-    // Apply the neon glow effect to each gradient element
-    neonElements.forEach((element) => {
-      element.style.filter = `drop-shadow(${shadowGlow})`;
+    const color3 = {
+      r: blendFactor(32, 100, Math.abs(normalizedX)),
+      g: blendFactor(18, 120, Math.abs(normalizedY)),
+      b: blendFactor(229, 250, Math.abs(normalizedX)),
+    };
+
+    const color4 = {
+      r: blendFactor(192, 230, Math.abs(normalizedX)),
+      g: blendFactor(168, 190, Math.abs(normalizedY)),
+      b: blendFactor(168, 180, Math.abs(normalizedY)),
+    };
+
+    const color5 = {
+      r: blendFactor(6, 80, Math.abs(normalizedY)),
+      g: blendFactor(54, 100, Math.abs(normalizedX)),
+      b: blendFactor(5, 150, Math.abs(normalizedX)),
+    };
+
+    // Apply updated colors and offsets to gradient stops
+    gradientElements.forEach((gradientElement) => {
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: rgba(${color1.r}, ${color1.g}, ${color1.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
+
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: rgba(${color2.r}, ${color2.g}, ${color2.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: rgba(${color3.r}, ${color3.g}, ${color3.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
+
+      gradientElement.children[3].setAttribute(
+        "style",
+        `stop-color: rgba(${color4.r}, ${color4.g}, ${color4.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+
+      gradientElement.children[4].setAttribute(
+        "style",
+        `stop-color: rgba(${color5.r}, ${color5.g}, ${color5.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
     });
-
-    // If there's an SVG logo, apply the same neon effect
-    const svgElement = document.querySelector("#svglogo");
-    if (svgElement) {
-      svgElement.style.filter = `drop-shadow(${shadowGlow})`;
-    }
   });
 }
-
-// Start the neon effect
-// startNeonEffect();
 
 // script for diagonal text move
 
