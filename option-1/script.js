@@ -137,20 +137,51 @@ function startGradientEffect() {
 
   // Start the motion handler
   startMotionHandler((x, y) => {
-    const normalizedX = x / 25; // Adjust sensitivity for smoother movement
-    const normalizedY = y / 25;
+    const normalizedX = x / 15; // Increased intensity for more dramatic neon glow
+    const normalizedY = y / 15;
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Adjust shadow on the #svglogo element based on tilt
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
-    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
-    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
+    // Calculate shadow offsets for neon-like glow
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 25);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 25);
 
-    // Adjust background position dynamically to create a parallax neon effect
-    const posX = Math.round(normalizedX * 50); // Scale factor for X-axis movement
-    const posY = Math.round(normalizedY * 50); // Scale factor for Y-axis movement
-    gradientElement.style.backgroundPosition = `${posX}px ${posY}px`;
+    // Neon-like shadow effect
+    svgElement.style.filter = `
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 20px rgba(0, 255, 255, 0.8))
+      drop-shadow(${-shadowOffsetX}px ${-shadowOffsetY}px 20px rgba(255, 0, 255, 0.8))
+      drop-shadow(${shadowOffsetY}px ${-shadowOffsetX}px 30px rgba(255, 255, 0, 0.8))
+    `;
+
+    // Adjust gradient colors dynamically for vibrant neon effect
+    const vibrantColor = (base, offset) =>
+      Math.max(0, Math.min(255, base + offset));
+    const color1 = `rgba(${vibrantColor(
+      255,
+      normalizedX * 100
+    )}, 0, ${vibrantColor(128, normalizedY * 100)}, 1)`;
+    const color2 = `rgba(0, ${vibrantColor(
+      255,
+      normalizedY * 100
+    )}, ${vibrantColor(255, -normalizedX * 100)}, 1)`;
+    const color3 = `rgba(${vibrantColor(
+      128,
+      -normalizedY * 100
+    )}, 0, ${vibrantColor(255, normalizedX * 100)}, 1)`;
+    const color4 = `rgba(0, ${vibrantColor(
+      128,
+      normalizedX * 100
+    )}, ${vibrantColor(255, normalizedY * 100)}, 1)`;
+    const color5 = `rgba(${vibrantColor(
+      255,
+      normalizedY * 100
+    )}, ${vibrantColor(0, -normalizedX * 100)}, 255, 1)`;
+
+    gradientElement.children[0].setAttribute("stop-color", color1);
+    gradientElement.children[1].setAttribute("stop-color", color2);
+    gradientElement.children[2].setAttribute("stop-color", color3);
+    gradientElement.children[3].setAttribute("stop-color", color4);
+    gradientElement.children[4].setAttribute("stop-color", color5);
   });
 }
 

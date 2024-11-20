@@ -114,14 +114,3 @@
 
   display: flex;
 }
-#gradient1 {
-  background-image: linear-gradient(45deg, #333 40%, #ddd 60%, #333);
-  background-attachment: fixed;
-  mix-blend-mode: color-burn;
-  z-index: 1;
-  transition: background-position 0.1s ease; /* Smooth transition */
-}
-
-#svglogo {
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); /* Default shadow */
-}
