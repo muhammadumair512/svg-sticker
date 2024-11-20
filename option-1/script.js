@@ -132,29 +132,33 @@ function startMotionHandler(onMotionUpdate) {
 }
 
 function startGradientEffect() {
-  const svgElement = document.querySelector("#gradient1");
+  const gradientElement = document.querySelector("#gradient1");
+
+  // Apply the necessary styles for the holographic neon effect
+  gradientElement.style.backgroundImage =
+    "linear-gradient(45deg, #333 40%, #ddd 60%, #333)";
+  gradientElement.style.backgroundAttachment = "fixed";
+  gradientElement.style.mixBlendMode = "color-burn";
+  gradientElement.style.zIndex = "1";
+  gradientElement.style.transition = "background-position 0.1s ease";
 
   // Start the motion handler
   startMotionHandler((x, y) => {
-    const normalizedX = x / 25;
+    const normalizedX = x / 25; // Adjust sensitivity for smoother movement
     const normalizedY = y / 25;
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Calculate shadow offsets for the neon effect
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    // Adjust shadow on the #svglogo element based on tilt
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
-    // Apply neon-like drop-shadow with tilt responsiveness
-    svgElement.style.filter = `
-      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 255, 255, 0.8))
-      drop-shadow(${shadowOffsetX * -1}px ${
-      shadowOffsetY * -1
-    }px 10px rgba(255, 0, 255, 0.8))
-      drop-shadow(${shadowOffsetY}px ${
-      shadowOffsetX * -1
-    }px 10px rgba(0, 255, 0, 0.8))
-    `;
+    // Adjust background position dynamically to create a parallax neon effect
+    const posX = Math.round(normalizedX * 50); // Scale factor for X-axis movement
+    const posY = Math.round(normalizedY * 50); // Scale factor for Y-axis movement
+    gradientElement.style.backgroundPosition = `${posX}px ${posY}px`;
   });
 }
 
