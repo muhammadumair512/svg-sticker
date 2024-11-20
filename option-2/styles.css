@@ -153,10 +153,9 @@ svg {
   }
 }
 
-#text {
+.text {
   word-spacing: 4px;
   color: rgba(18, 1, 1, 0.55);
-  display: none;
   font-size: 10px;
 
   position: absolute;
