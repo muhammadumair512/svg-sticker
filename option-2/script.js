@@ -85,14 +85,13 @@ function startMotionHandler(onMotionUpdate) {
 
 function startGradientEffect() {
   const neonElements = document.querySelectorAll("#gradient1");
-
   startMotionHandler((x, y) => {
     // Normalize tilt values and scale sensitivity
     const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
     const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
-
+    alert(angle);
     // Neon glow effect: dynamic drop-shadow
     const svgElement = document.querySelector("#svglogo");
     const neonOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Neon shadow X
