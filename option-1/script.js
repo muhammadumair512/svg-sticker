@@ -147,14 +147,10 @@ function startGradientEffect() {
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 10);
     svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
-    // Gradient offsets remain stable and proportional
-    const offset1 = 0;
-    const offset2 = 25;
-    const offset3 = 50;
-    const offset4 = 75;
-    const offset5 = 100;
+    // Calculate color shift based on tilt
+    const shiftFactor = Math.sin(normalizedX + normalizedY) * 100;
 
-    // Initial base colors (at 0 degrees)
+    // Base colors for transition (starting colors)
     const baseColors = [
       { r: 255, g: 0, b: 100 }, // Pink
       { r: 255, g: 100, b: 0 }, // Orange
@@ -163,47 +159,58 @@ function startGradientEffect() {
       { r: 0, g: 100, b: 255 }, // Blue
     ];
 
-    // Generate smoothly transitioning colors
-    const colors = baseColors.map((baseColor, index) => {
-      const shift = Math.sin((normalizedX + normalizedY + index) * Math.PI); // Smooth shifting
-      return {
-        r: Math.round(baseColor.r + shift * 50), // Minor color changes
-        g: Math.round(baseColor.g + shift * 50),
-        b: Math.round(baseColor.b + shift * 50),
-      };
-    });
+    // Calculate a smooth color transition for the current tilt
+    const activeColor =
+      baseColors[
+        Math.floor((shiftFactor / 100) * baseColors.length) % baseColors.length
+      ];
 
-    // Update gradient stops with new colors
+    // Smooth color transition based on tilt
+    const smoothColor = {
+      r: Math.round(activeColor.r + shiftFactor),
+      g: Math.round(activeColor.g + shiftFactor),
+      b: Math.round(activeColor.b + shiftFactor),
+    };
+
+    // Ensure color values stay within the valid range [0, 255]
+    const constrainedColor = {
+      r: Math.max(0, Math.min(255, smoothColor.r)),
+      g: Math.max(0, Math.min(255, smoothColor.g)),
+      b: Math.max(0, Math.min(255, smoothColor.b)),
+    };
+
+    // Apply the smooth color to all gradient stops
     gradientElements.forEach((gradientElement) => {
+      // Since we want one single color, set all stops to this color
       gradientElement.children[0].setAttribute(
         "style",
-        `stop-color: rgba(${colors[0].r}, ${colors[0].g}, ${colors[0].b}, 1); stop-opacity: 1;`
+        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
       );
-      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
+      gradientElement.children[0].setAttribute("offset", "0%");
 
       gradientElement.children[1].setAttribute(
         "style",
-        `stop-color: rgba(${colors[1].r}, ${colors[1].g}, ${colors[1].b}, 1); stop-opacity: 1;`
+        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
       );
-      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
+      gradientElement.children[1].setAttribute("offset", "25%");
 
       gradientElement.children[2].setAttribute(
         "style",
-        `stop-color: rgba(${colors[2].r}, ${colors[2].g}, ${colors[2].b}, 1); stop-opacity: 1;`
+        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
       );
-      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
+      gradientElement.children[2].setAttribute("offset", "50%");
 
       gradientElement.children[3].setAttribute(
         "style",
-        `stop-color: rgba(${colors[3].r}, ${colors[3].g}, ${colors[3].b}, 1); stop-opacity: 1;`
+        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
       );
-      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+      gradientElement.children[3].setAttribute("offset", "75%");
 
       gradientElement.children[4].setAttribute(
         "style",
-        `stop-color: rgba(${colors[4].r}, ${colors[4].g}, ${colors[4].b}, 1); stop-opacity: 1;`
+        `stop-color: rgba(${constrainedColor.r}, ${constrainedColor.g}, ${constrainedColor.b}, 1); stop-opacity: 1;`
       );
-      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
+      gradientElement.children[4].setAttribute("offset", "100%");
     });
   });
 }
