@@ -133,14 +133,7 @@ function startMotionHandler(onMotionUpdate) {
 
 function startGradientEffect() {
   const gradientElement = document.querySelector("#gradient1");
-
-  // Apply the necessary styles for the holographic neon effect
-  gradientElement.style.backgroundImage =
-    "linear-gradient(45deg, #333 40%, #ddd 60%, #333)";
-  gradientElement.style.backgroundAttachment = "fixed";
-  gradientElement.style.mixBlendMode = "color-burn";
-  gradientElement.style.zIndex = "1";
-  gradientElement.style.transition = "background-position 0.1s ease";
+  const svgElement = document.querySelector("#svglogo");
 
   // Start the motion handler
   startMotionHandler((x, y) => {
@@ -150,7 +143,6 @@ function startGradientEffect() {
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
     // Adjust shadow on the #svglogo element based on tilt
-    const svgElement = document.querySelector("#svglogo");
     const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
     svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
