@@ -132,44 +132,79 @@ function startMotionHandler(onMotionUpdate) {
 }
 
 function startGradientEffect() {
-  const gradientElement = document.querySelector("#gradient1");
-  const svgElement = document.querySelector("#svglogo");
+  const gradientElements = document.querySelectorAll("#gradient1");
 
-  // Start the motion handler
+  // Handle motion changes
   startMotionHandler((x, y) => {
-    const normalizedX = x / 15; // Increased intensity for more dramatic neon glow
-    const normalizedY = y / 15;
-
+    // Normalize tilt values for smooth transitions
+    const normalizedX = x / 45; // Range [-1, 1]
+    const normalizedY = y / 45; // Range [-1, 1]
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Calculate shadow offsets for neon-like glow
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 25);
-    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 25);
+    // Dynamic shadow effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 10);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 10);
+    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
-    // Neon-like shadow effect
-    svgElement.style.filter = `
-      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 20px rgba(0, 255, 255, 0.8))
-      drop-shadow(${-shadowOffsetX}px ${-shadowOffsetY}px 20px rgba(255, 0, 255, 0.8))
-      drop-shadow(${shadowOffsetY}px ${-shadowOffsetX}px 30px rgba(255, 255, 0, 0.8))
-    `;
+    // Gradient offsets remain stable and proportional
+    const offset1 = 0;
+    const offset2 = 25;
+    const offset3 = 50;
+    const offset4 = 75;
+    const offset5 = 100;
 
-    // Adjust a single gradient color dynamically
-    const vibrantColor = (base, offset) =>
-      Math.max(0, Math.min(255, base + offset));
+    // Initial base colors (at 0 degrees)
+    const baseColors = [
+      { r: 255, g: 0, b: 100 }, // Pink
+      { r: 255, g: 100, b: 0 }, // Orange
+      { r: 255, g: 255, b: 0 }, // Yellow
+      { r: 0, g: 255, b: 100 }, // Green
+      { r: 0, g: 100, b: 255 }, // Blue
+    ];
 
-    // Calculate the color based on the tilt
-    const baseRed = vibrantColor(255, normalizedX * 100);
-    const baseGreen = vibrantColor(255, normalizedY * 100);
-    const baseBlue = vibrantColor(255, -normalizedX * 100);
+    // Generate smoothly transitioning colors
+    const colors = baseColors.map((baseColor, index) => {
+      const shift = Math.sin((normalizedX + normalizedY + index) * Math.PI); // Smooth shifting
+      return {
+        r: Math.round(baseColor.r + shift * 50), // Minor color changes
+        g: Math.round(baseColor.g + shift * 50),
+        b: Math.round(baseColor.b + shift * 50),
+      };
+    });
 
-    const singleColor = `rgba(${baseRed}, ${baseGreen}, ${baseBlue}, 1)`;
+    // Update gradient stops with new colors
+    gradientElements.forEach((gradientElement) => {
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: rgba(${colors[0].r}, ${colors[0].g}, ${colors[0].b}, 1); stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
 
-    // Apply the same color to all gradient stops
-    gradientElement.children[0].setAttribute("stop-color", singleColor);
-    gradientElement.children[1].setAttribute("stop-color", singleColor);
-    gradientElement.children[2].setAttribute("stop-color", singleColor);
-    gradientElement.children[3].setAttribute("stop-color", singleColor);
-    gradientElement.children[4].setAttribute("stop-color", singleColor);
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: rgba(${colors[1].r}, ${colors[1].g}, ${colors[1].b}, 1); stop-opacity: 1;`
+      );
+      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: rgba(${colors[2].r}, ${colors[2].g}, ${colors[2].b}, 1); stop-opacity: 1;`
+      );
+      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
+
+      gradientElement.children[3].setAttribute(
+        "style",
+        `stop-color: rgba(${colors[3].r}, ${colors[3].g}, ${colors[3].b}, 1); stop-opacity: 1;`
+      );
+      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+
+      gradientElement.children[4].setAttribute(
+        "style",
+        `stop-color: rgba(${colors[4].r}, ${colors[4].g}, ${colors[4].b}, 1); stop-opacity: 1;`
+      );
+      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
+    });
   });
 }
 
