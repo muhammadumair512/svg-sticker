@@ -97,42 +97,45 @@ function startGradientEffect() {
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
     svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
-    const offset1 = Math.max(0, 10 + normalizedX * 10); // Offset for stop 1
-    const offset2 = Math.max(0, 30 + normalizedY * 10); // Offset for stop 2
-    const offset3 = Math.max(0, 50 + normalizedX * 10); // Offset for stop 3
-    const offset4 = Math.max(0, 70 + normalizedY * 10); // Offset for stop 4
+    // Smooth offsets
+    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 10));
+    const offset2 = Math.min(100, Math.max(0, 30 + normalizedY * 10));
+    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 10));
+    const offset4 = Math.min(100, Math.max(0, 70 + normalizedY * 10));
     const offset5 = 100; // Final stop stays at 100%
 
+    // Smooth color blending
     const color1 = {
-      r: Math.max(0, Math.min(255, 228 + normalizedX * 30 - normalizedY * 20)),
-      g: Math.max(0, Math.min(255, 14 + normalizedY * 40 - normalizedX * 20)),
-      b: Math.max(0, Math.min(255, 14 + normalizedX * 20 + normalizedY * 10)),
+      r: Math.round(228 + normalizedX * 30 - normalizedY * 20),
+      g: Math.round(14 + normalizedY * 40 - normalizedX * 20),
+      b: Math.round(14 + normalizedX * 20 + normalizedY * 10),
     };
 
     const color2 = {
-      r: Math.max(0, Math.min(255, 9 + normalizedY * 30 + normalizedX * 20)),
-      g: Math.max(0, Math.min(255, 235 - normalizedX * 30 + normalizedY * 40)),
-      b: Math.max(0, Math.min(255, 156 + normalizedX * 20 - normalizedY * 30)),
+      r: Math.round(9 + normalizedY * 30 + normalizedX * 20),
+      g: Math.round(235 - normalizedX * 30 + normalizedY * 40),
+      b: Math.round(156 + normalizedX * 20 - normalizedY * 30),
     };
 
     const color3 = {
-      r: Math.max(0, Math.min(255, 32 - normalizedY * 20 + normalizedX * 40)),
-      g: Math.max(0, Math.min(255, 18 + normalizedX * 30 - normalizedY * 20)),
-      b: Math.max(0, Math.min(255, 229 + normalizedY * 30 + normalizedX * 10)),
+      r: Math.round(32 - normalizedY * 20 + normalizedX * 40),
+      g: Math.round(18 + normalizedX * 30 - normalizedY * 20),
+      b: Math.round(229 + normalizedY * 30 + normalizedX * 10),
     };
 
     const color4 = {
-      r: Math.max(0, Math.min(255, 192 + normalizedX * 20 + normalizedY * 20)),
-      g: Math.max(0, Math.min(255, 168 - normalizedY * 30 + normalizedX * 30)),
-      b: Math.max(0, Math.min(255, 168 + normalizedX * 30 - normalizedY * 10)),
+      r: Math.round(192 + normalizedX * 20 + normalizedY * 20),
+      g: Math.round(168 - normalizedY * 30 + normalizedX * 30),
+      b: Math.round(168 + normalizedX * 30 - normalizedY * 10),
     };
 
     const color5 = {
-      r: Math.max(0, Math.min(255, 6 + normalizedY * 40 - normalizedX * 20)),
-      g: Math.max(0, Math.min(255, 54 + normalizedX * 20 + normalizedY * 30)),
-      b: Math.max(0, Math.min(255, 5 + normalizedY * 20 + normalizedX * 40)),
+      r: Math.round(6 + normalizedY * 40 - normalizedX * 20),
+      g: Math.round(54 + normalizedX * 20 + normalizedY * 30),
+      b: Math.round(5 + normalizedY * 20 + normalizedX * 40),
     };
 
+    // Apply updated colors and offsets to gradient stops
     gradientElements.forEach((gradientElement) => {
       gradientElement.children[0].setAttribute(
         "style",
