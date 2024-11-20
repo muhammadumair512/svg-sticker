@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+  startGradientEffect();
+});
+
 function Marqueertl(selector, speed) {
   const parentSelector = document.querySelector(selector);
   const clone = parentSelector.innerHTML;
