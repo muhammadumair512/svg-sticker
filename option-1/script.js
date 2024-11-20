@@ -131,8 +131,8 @@ function startMotionHandler(onMotionUpdate) {
   }
 }
 
-function startGradientEffect() {
-  const gradientElement = document.querySelector("#gradient1");
+function startNeonEffect() {
+  const svgElement = document.querySelector("#svglogo");
 
   // Start the motion handler
   startMotionHandler((x, y) => {
@@ -141,76 +141,20 @@ function startGradientEffect() {
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    const svgElement = document.querySelector("#svglogo");
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
+    // Calculate shadow offsets for the neon effect
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
-    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
-    const offset1 = Math.max(0, 10 + normalizedX * 10); // Offset for stop 1
-    const offset2 = Math.max(0, 30 + normalizedY * 10); // Offset for stop 2
-    const offset3 = Math.max(0, 50 + normalizedX * 10); // Offset for stop 3
-    const offset4 = Math.max(0, 70 + normalizedY * 10); // Offset for stop 4
-    const offset5 = 100;
-    const color1 = {
-      r: Math.max(0, Math.min(255, 228 + normalizedX * 30 - normalizedY * 20)),
-      g: Math.max(0, Math.min(255, 14 + normalizedY * 40 - normalizedX * 20)),
-      b: Math.max(0, Math.min(255, 14 + normalizedX * 20 + normalizedY * 10)),
-    };
-
-    const color2 = {
-      r: Math.max(0, Math.min(255, 9 + normalizedY * 30 + normalizedX * 20)),
-      g: Math.max(0, Math.min(255, 235 - normalizedX * 30 + normalizedY * 40)),
-      b: Math.max(0, Math.min(255, 156 + normalizedX * 20 - normalizedY * 30)),
-    };
-
-    const color3 = {
-      r: Math.max(0, Math.min(255, 32 - normalizedY * 20 + normalizedX * 40)),
-      g: Math.max(0, Math.min(255, 18 + normalizedX * 30 - normalizedY * 20)),
-      b: Math.max(0, Math.min(255, 229 + normalizedY * 30 + normalizedX * 10)),
-    };
-
-    const color4 = {
-      r: Math.max(0, Math.min(255, 192 + normalizedX * 20 + normalizedY * 20)),
-      g: Math.max(0, Math.min(255, 168 - normalizedY * 30 + normalizedX * 30)),
-      b: Math.max(0, Math.min(255, 168 + normalizedX * 30 - normalizedY * 10)),
-    };
-
-    const color5 = {
-      r: Math.max(0, Math.min(255, 6 + normalizedY * 40 - normalizedX * 20)),
-      g: Math.max(0, Math.min(255, 54 + normalizedX * 20 + normalizedY * 30)),
-      b: Math.max(0, Math.min(255, 5 + normalizedY * 20 + normalizedX * 40)),
-    };
-
-    // Update gradient stops with smooth blending
-    gradientElement.children[0].setAttribute(
-      "style",
-      `stop-color: rgba(${color1.r}, ${color1.g}, ${color1.b}, 0.9); stop-opacity: 1;`
-    );
-    gradientElement.children[0].setAttribute("offset", `${offset1}%`);
-
-    gradientElement.children[1].setAttribute(
-      "style",
-      `stop-color: rgba(${color2.r}, ${color2.g}, ${color2.b}, 0.9); stop-opacity: 1;`
-    );
-    gradientElement.children[1].setAttribute("offset", `${offset2}%`);
-
-    gradientElement.children[2].setAttribute(
-      "style",
-      `stop-color: rgba(${color3.r}, ${color3.g}, ${color3.b}, 0.9); stop-opacity: 1;`
-    );
-    gradientElement.children[2].setAttribute("offset", `${offset3}%`);
-
-    gradientElement.children[3].setAttribute(
-      "style",
-      `stop-color: rgba(${color4.r}, ${color4.g}, ${color4.b}, 0.9); stop-opacity: 1;`
-    );
-    gradientElement.children[3].setAttribute("offset", `${offset4}%`);
-
-    gradientElement.children[4].setAttribute(
-      "style",
-      `stop-color: rgba(${color5.r}, ${color5.g}, ${color5.b}, 0.9); stop-opacity: 1;`
-    );
-    gradientElement.children[4].setAttribute("offset", `${offset5}%`);
+    // Apply neon-like drop-shadow with tilt responsiveness
+    svgElement.style.filter = `
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 255, 255, 0.8))
+      drop-shadow(${shadowOffsetX * -1}px ${
+      shadowOffsetY * -1
+    }px 10px rgba(255, 0, 255, 0.8))
+      drop-shadow(${shadowOffsetY}px ${
+      shadowOffsetX * -1
+    }px 10px rgba(0, 255, 0, 0.8))
+    `;
   });
 }
 
