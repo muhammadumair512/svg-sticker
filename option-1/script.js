@@ -141,49 +141,76 @@ function startGradientEffect() {
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Adjust shadow for neon glow effect
+    // Adjust shadow for smooth visual effect
     const svgElement = document.querySelector("#svglogo");
     const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
 
-    // Generate dynamic neon color
-    const neonColor = {
-      r: Math.round(255 - normalizedX * 128), // Bright range for red
-      g: Math.round(100 + normalizedY * 155), // Bright range for green
-      b: Math.round(200 + normalizedX * 55), // Bright range for blue
+    // Define a larger color palette
+    const colorPalette = [
+      { r: 255, g: 0, b: 0 }, // Red
+      { r: 255, g: 165, b: 0 }, // Orange
+      { r: 255, g: 255, b: 0 }, // Yellow
+      { r: 0, g: 255, b: 0 }, // Green
+      { r: 0, g: 0, b: 255 }, // Blue
+      { r: 75, g: 0, b: 130 }, // Indigo
+      { r: 238, g: 130, b: 238 }, // Violet
+    ];
+
+    // Interpolate between colors based on tilt
+    const totalColors = colorPalette.length;
+    const position = (normalizedX + 1) * 0.5 * (totalColors - 1); // Map [-1, 1] to [0, totalColors-1]
+    const lowerIndex = Math.floor(position);
+    const upperIndex = Math.min(lowerIndex + 1, totalColors - 1);
+    const blendFactor = position - lowerIndex;
+
+    const blendColor = {
+      r: Math.round(
+        colorPalette[lowerIndex].r * (1 - blendFactor) +
+          colorPalette[upperIndex].r * blendFactor
+      ),
+      g: Math.round(
+        colorPalette[lowerIndex].g * (1 - blendFactor) +
+          colorPalette[upperIndex].g * blendFactor
+      ),
+      b: Math.round(
+        colorPalette[lowerIndex].b * (1 - blendFactor) +
+          colorPalette[upperIndex].b * blendFactor
+      ),
     };
 
-    const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
+    const blendedColor = `rgba(${blendColor.r}, ${blendColor.g}, ${blendColor.b}, 0.9)`;
 
-    // Apply dynamic neon glow using drop-shadow
+    // Apply smooth glow effect
     svgElement.style.filter = `
-      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
-      drop-shadow(0px 0px 30px ${neonGlowColor}),
-      drop-shadow(0px 0px 50px ${neonGlowColor})
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${blendedColor}),
+      drop-shadow(0px 0px 30px ${blendedColor}),
+      drop-shadow(0px 0px 50px ${blendedColor})
     `;
 
-    // Apply neon effect to gradient colors dynamically
+    // Apply gradient with smooth transitions
     gradientElements.forEach((gradientElement) => {
       gradientElement.children[0].setAttribute(
         "style",
-        `stop-color: ${neonGlowColor}; stop-opacity: 1;`
+        `stop-color: ${blendedColor}; stop-opacity: 1;`
       );
       gradientElement.children[0].setAttribute("offset", "10%");
 
       gradientElement.children[1].setAttribute(
         "style",
-        `stop-color: ${neonGlowColor}; stop-opacity: 0.8;`
+        `stop-color: ${blendedColor}; stop-opacity: 0.8;`
       );
       gradientElement.children[1].setAttribute("offset", "50%");
 
       gradientElement.children[2].setAttribute(
         "style",
-        `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
+        `stop-color: ${blendedColor}; stop-opacity: 0.6;`
       );
       gradientElement.children[2].setAttribute("offset", "90%");
     });
   });
 }
+// startGradientEffect();
 
 // Call the function to start the neon effect
 
