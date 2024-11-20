@@ -86,58 +86,76 @@ function startMotionHandler(onMotionUpdate) {
 function startGradientEffect() {
   const gradientElements = document.querySelectorAll("#gradient1");
 
-  // Motion handler for device tilt
+  // Handle motion changes
   startMotionHandler((x, y) => {
-    // Normalize tilt values for smoother transitions
+    // Normalize tilt values for smooth transitions
     const normalizedX = x / 45; // Range [-1, 1]
     const normalizedY = y / 45; // Range [-1, 1]
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Initial base colors
+    // Dynamic shadow effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 10);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 10);
+    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
+
+    // Gradient offsets remain stable and proportional
+    const offset1 = 0;
+    const offset2 = 25;
+    const offset3 = 50;
+    const offset4 = 75;
+    const offset5 = 100;
+
+    // Initial base colors (at 0 degrees)
     const baseColors = [
-      { r: 255, g: 14, b: 14 }, // Stop 1: Red
-      { r: 9, g: 255, b: 156 }, // Stop 2: Green
-      { r: 32, g: 18, b: 255 }, // Stop 3: Blue
+      { r: 228, g: 14, b: 14 }, // Stop 1: Red
+      { r: 9, g: 235, b: 156 }, // Stop 2: Green
+      { r: 32, g: 18, b: 229 }, // Stop 3: Blue
       { r: 192, g: 168, b: 168 }, // Stop 4: Neutral
-      { r: 6, g: 54, b: 5 }, // Stop 5: Dark
+      { r: 6, g: 54, b: 5 }, // Stop 5: Dark Green
     ];
 
-    // Calculate smooth color shifts based on tilt
+    // Generate smoothly transitioning colors
     const colors = baseColors.map((baseColor, index) => {
-      const tiltFactor = index * 0.5; // Create variation among stops
-      const shiftR = baseColor.r + Math.sin(normalizedX + tiltFactor) * 20;
-      const shiftG = baseColor.g + Math.cos(normalizedY + tiltFactor) * 20;
-      const shiftB =
-        baseColor.b + Math.sin(normalizedX - normalizedY - tiltFactor) * 20;
-
+      const shift = Math.sin((normalizedX + normalizedY + index) * Math.PI); // Smooth shifting
       return {
-        r: Math.max(0, Math.min(255, Math.round(shiftR))),
-        g: Math.max(0, Math.min(255, Math.round(shiftG))),
-        b: Math.max(0, Math.min(255, Math.round(shiftB))),
+        r: Math.round(baseColor.r + shift * 50), // Minor color changes
+        g: Math.round(baseColor.g + shift * 50),
+        b: Math.round(baseColor.b + shift * 50),
       };
     });
 
-    // Update gradient stops with smoothly adjusted colors
+    // Update gradient stops with new colors
     gradientElements.forEach((gradientElement) => {
       gradientElement.children[0].setAttribute(
         "style",
-        `stop-color: rgba(${colors[0].r}, 14, 14, 0.9);`
+        `stop-color: rgba(${colors[0].r}, ${colors[0].g}, ${colors[0].b}, 1); stop-opacity: 1;`
       );
+      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
+
       gradientElement.children[1].setAttribute(
         "style",
-        `stop-color: rgba(9, ${colors[1].g}, 156, 0.9);`
+        `stop-color: rgba(${colors[1].r}, ${colors[1].g}, ${colors[1].b}, 1); stop-opacity: 1;`
       );
+      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
+
       gradientElement.children[2].setAttribute(
         "style",
-        `stop-color: rgba(32, 18, ${colors[2].b}, 0.9);`
+        `stop-color: rgba(${colors[2].r}, ${colors[2].g}, ${colors[2].b}, 1); stop-opacity: 1;`
       );
+      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
+
       gradientElement.children[3].setAttribute(
         "style",
-        `stop-color: rgba(192, 168, 168, 0.9);`
+        `stop-color: rgba(${colors[3].r}, ${colors[3].g}, ${colors[3].b}, 1); stop-opacity: 1;`
       );
+      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+
       gradientElement.children[4].setAttribute(
         "style",
-        `stop-color: rgba(6, 54, 5, 0.9);`
+        `stop-color: rgba(${colors[4].r}, ${colors[4].g}, ${colors[4].b}, 1); stop-opacity: 1;`
       );
+      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
     });
   });
 }
