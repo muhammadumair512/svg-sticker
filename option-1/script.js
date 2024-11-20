@@ -131,8 +131,8 @@ function startMotionHandler(onMotionUpdate) {
   }
 }
 
-function startNeonEffect() {
-  const svgElement = document.querySelector("#svglogo");
+function startGradientEffect() {
+  const svgElement = document.querySelector("#gradient1");
 
   // Start the motion handler
   startMotionHandler((x, y) => {
