@@ -86,40 +86,37 @@ function startMotionHandler(onMotionUpdate) {
 function startGradientEffect() {
   const gradientElements = document.querySelectorAll("#gradient1");
 
+  // Motion handler for device tilt
   startMotionHandler((x, y) => {
-    // Normalize tilt values for smooth transitions
+    // Normalize tilt values for smoother transitions
     const normalizedX = x / 45; // Range [-1, 1]
     const normalizedY = y / 45; // Range [-1, 1]
 
     // Initial base colors
     const baseColors = [
-      { r: 255, g: 14, b: 14 }, // Red for Stop 1
-      { r: 9, g: 255, b: 156 }, // Green for Stop 2
-      { r: 32, g: 18, b: 255 }, // Blue for Stop 3
-      { r: 192, g: 168, b: 168 }, // Neutral for Stop 4
-      { r: 6, g: 54, b: 5 }, // Dark for Stop 5
+      { r: 255, g: 14, b: 14 }, // Stop 1: Red
+      { r: 9, g: 255, b: 156 }, // Stop 2: Green
+      { r: 32, g: 18, b: 255 }, // Stop 3: Blue
+      { r: 192, g: 168, b: 168 }, // Stop 4: Neutral
+      { r: 6, g: 54, b: 5 }, // Stop 5: Dark
     ];
 
-    // Smoothly modify colors based on tilt
+    // Calculate smooth color shifts based on tilt
     const colors = baseColors.map((baseColor, index) => {
-      const shiftR = Math.round(
-        baseColor.r + Math.sin(normalizedX + index) * 30
-      );
-      const shiftG = Math.round(
-        baseColor.g + Math.cos(normalizedY + index) * 30
-      );
-      const shiftB = Math.round(
-        baseColor.b + Math.sin(normalizedX - normalizedY) * 30
-      );
+      const tiltFactor = index * 0.5; // Create variation among stops
+      const shiftR = baseColor.r + Math.sin(normalizedX + tiltFactor) * 20;
+      const shiftG = baseColor.g + Math.cos(normalizedY + tiltFactor) * 20;
+      const shiftB =
+        baseColor.b + Math.sin(normalizedX - normalizedY - tiltFactor) * 20;
 
       return {
-        r: Math.max(0, Math.min(255, shiftR)), // Clamp values between 0-255
-        g: Math.max(0, Math.min(255, shiftG)),
-        b: Math.max(0, Math.min(255, shiftB)),
+        r: Math.max(0, Math.min(255, Math.round(shiftR))),
+        g: Math.max(0, Math.min(255, Math.round(shiftG))),
+        b: Math.max(0, Math.min(255, Math.round(shiftB))),
       };
     });
 
-    // Update gradient stops with new colors
+    // Update gradient stops with smoothly adjusted colors
     gradientElements.forEach((gradientElement) => {
       gradientElement.children[0].setAttribute(
         "style",
