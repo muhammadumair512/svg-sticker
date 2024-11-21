@@ -90,70 +90,36 @@ function startMotionHandler(onMotionUpdate) {
 }
 
 function startGradientEffect() {
-  const gradientElements = document.querySelectorAll("#gradient1");
+  const svgElement = document.querySelector("#svglogo");
+  const gradientElement = document.querySelector("#gradient1");
 
-  // Function to map tilt to angle and color rotation
+  // Function to update gradient rotation
+  const updateGradientRotation = (angle) => {
+    gradientElement.setAttribute(
+      "gradientTransform",
+      `rotate(${angle}, 0.5, 0.5)`
+    );
+  };
+
+  // Handle device orientation changes
+  const startMotionHandler = (callback) => {
+    window.addEventListener("deviceorientation", (event) => {
+      const x = event.beta || 0; // Tilt front-to-back
+      const y = event.gamma || 0; // Tilt left-to-right
+      callback(x, y);
+    });
+  };
+
   startMotionHandler((x, y) => {
+    // Calculate rotation angle based on tilt
     const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
     const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Calculate smooth rotation offsets
-    const rotationOffset = (angle + 360) % 360; // Normalize to [0, 360]
-    const offset1 = (rotationOffset / 360 + 0) % 1; // Purple
-    const offset2 = (rotationOffset / 360 + 0.2) % 1; // Red
-    const offset3 = (rotationOffset / 360 + 0.4) % 1; // Yellow
-    const offset4 = (rotationOffset / 360 + 0.6) % 1; // Yellow
-    const offset5 = (rotationOffset / 360 + 0.8) % 1; // Red
+    // Smoothly update gradient rotation
+    updateGradientRotation(angle);
 
-    // Smooth color interpolation for the gradient stops
-    const smoothOffset = (value) => Math.min(1, Math.max(0, value)).toFixed(2);
-
-    // Define gradient colors
-    const colors = [
-      { r: 128, g: 0, b: 128 }, // Purple
-      { r: 255, g: 0, b: 0 }, // Red
-      { r: 255, g: 255, b: 0 }, // Yellow
-      { r: 255, g: 255, b: 0 }, // Yellow
-      { r: 255, g: 0, b: 0 }, // Red
-      { r: 128, g: 0, b: 128 }, // Purple
-    ];
-
-    // Apply updated offsets and colors to gradient stops
-    gradientElements.forEach((gradientElement) => {
-      gradientElement.children[0].setAttribute(
-        "style",
-        `stop-color: rgb(${colors[0].r}, ${colors[0].g}, ${colors[0].b}); stop-opacity: 1;`
-      );
-      gradientElement.children[0].setAttribute("offset", smoothOffset(offset1));
-
-      gradientElement.children[1].setAttribute(
-        "style",
-        `stop-color: rgb(${colors[1].r}, ${colors[1].g}, ${colors[1].b}); stop-opacity: 1;`
-      );
-      gradientElement.children[1].setAttribute("offset", smoothOffset(offset2));
-
-      gradientElement.children[2].setAttribute(
-        "style",
-        `stop-color: rgb(${colors[2].r}, ${colors[2].g}, ${colors[2].b}); stop-opacity: 1;`
-      );
-      gradientElement.children[2].setAttribute("offset", smoothOffset(offset3));
-
-      gradientElement.children[3].setAttribute(
-        "style",
-        `stop-color: rgb(${colors[3].r}, ${colors[3].g}, ${colors[3].b}); stop-opacity: 1;`
-      );
-      gradientElement.children[3].setAttribute("offset", smoothOffset(offset4));
-
-      gradientElement.children[4].setAttribute(
-        "style",
-        `stop-color: rgb(${colors[4].r}, ${colors[4].g}, ${colors[4].b}); stop-opacity: 1;`
-      );
-      gradientElement.children[4].setAttribute("offset", smoothOffset(offset5));
-    });
-
-    // Apply shadow for dynamic 3D effect
-    const svgElement = document.querySelector("#svglogo");
+    // Optional: Add dynamic shadow based on tilt
     const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
     const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
     svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
