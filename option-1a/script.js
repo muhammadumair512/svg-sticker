@@ -249,7 +249,7 @@ function updateGradient() {
 
 // Function to handle device tilt (orientation) changes
 function handleOrientation(event) {
-  alert(gradientAngle);
+  // alert(gradientAngle);
   if (event && event.beta !== null && event.gamma !== null) {
     // `beta` is front-to-back tilt (-180 to 180)
     // `gamma` is left-to-right tilt (-90 to 90)
