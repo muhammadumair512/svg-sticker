@@ -1,5 +1,6 @@
 window.addEventListener("load", () => {
   startGradientEffect2();
+  startGradientEffect3();
   RotateText();
 });
 const gradientElements = document.querySelectorAll("#gradient1");
@@ -45,6 +46,7 @@ function initializeMotionAccess() {
         if (response === "granted") {
           startGradientEffect();
           startGradientEffect2();
+          startGradientEffect3();
         } else {
           alert("Permission to access motion data was denied.");
         }
@@ -53,6 +55,7 @@ function initializeMotionAccess() {
   } else {
     startGradientEffect();
     startGradientEffect2();
+    startGradientEffect3();
   }
 }
 
@@ -89,89 +92,80 @@ function startMotionHandler(onMotionUpdate) {
 function startGradientEffect() {
   const gradientElements = document.querySelectorAll("#gradient1");
 
+  // Function to map tilt to angle and color rotation
   startMotionHandler((x, y) => {
-    // Normalize tilt values and scale sensitivity
     const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
     const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
-
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Adjust shadow for dynamic 3D effect
-    const svgElement = document.querySelector("#svglogo");
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
-    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
-    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
+    // Calculate smooth rotation offsets
+    const rotationOffset = (angle + 360) % 360; // Normalize to [0, 360]
+    const offset1 = (rotationOffset / 360 + 0) % 1; // Purple
+    const offset2 = (rotationOffset / 360 + 0.2) % 1; // Red
+    const offset3 = (rotationOffset / 360 + 0.4) % 1; // Yellow
+    const offset4 = (rotationOffset / 360 + 0.6) % 1; // Yellow
+    const offset5 = (rotationOffset / 360 + 0.8) % 1; // Red
 
-    // Smooth gradient stop offsets with slight overlap for smooth transitions
+    // Smooth color interpolation for the gradient stops
+    const smoothOffset = (value) => Math.min(1, Math.max(0, value)).toFixed(2);
 
-    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 15));
-    const offset2 = Math.min(100, Math.max(0, 25 + normalizedY * 10)); // Reduced spacing for smoother transitions
-    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 10));
-    const offset4 = Math.min(100, Math.max(0, 75 + normalizedY * 15));
-    const offset5 = 100;
-    // Enhanced color interpolation for better blending
-    const color1 = {
-      r: Math.round(228 + Math.sin(normalizedX * Math.PI) * 10),
-      g: Math.round(14 + Math.sin(normalizedY * Math.PI) * 25),
-      b: Math.round(14 + Math.cos(normalizedX * Math.PI) * 35),
-    };
+    // Define gradient colors
+    const colors = [
+      { r: 128, g: 0, b: 128 }, // Purple
+      { r: 255, g: 0, b: 0 }, // Red
+      { r: 255, g: 255, b: 0 }, // Yellow
+      { r: 255, g: 255, b: 0 }, // Yellow
+      { r: 255, g: 0, b: 0 }, // Red
+      { r: 128, g: 0, b: 128 }, // Purple
+    ];
 
-    const color2 = {
-      r: Math.round(9 + Math.cos(normalizedY * Math.PI) * 25),
-      g: Math.round(235 - Math.sin(normalizedX * Math.PI) * 25),
-      b: Math.round(156 + Math.sin(normalizedY * Math.PI) * 35),
-    };
-
-    const color3 = {
-      r: Math.round(32 + Math.sin(normalizedX * Math.PI) * 15),
-      g: Math.round(18 + Math.cos(normalizedY * Math.PI) * 25),
-      b: Math.round(229 - Math.sin(normalizedX * Math.PI) * 35),
-    };
-
-    const color4 = {
-      r: Math.round(192 + Math.cos(normalizedX * Math.PI) * 35),
-      g: Math.round(168 + Math.sin(normalizedY * Math.PI) * 25),
-      b: Math.round(168 - Math.cos(normalizedY * Math.PI) * 15),
-    };
-
-    const color5 = {
-      r: Math.round(6 + Math.sin(normalizedY * Math.PI) * 35),
-      g: Math.round(54 - Math.cos(normalizedX * Math.PI) * 15),
-      b: Math.round(5 + Math.sin(normalizedX * Math.PI) * 25),
-    };
-
-    // Apply updated colors and offsets to gradient stops
+    // Apply updated offsets and colors to gradient stops
     gradientElements.forEach((gradientElement) => {
       gradientElement.children[0].setAttribute(
         "style",
-        `stop-color: rgba(${color1.r}, ${color1.g}, ${color1.b}, 0.95); stop-opacity: 1;`
+        `stop-color: rgb(${colors[0].r}, ${colors[0].g}, ${colors[0].b}); stop-opacity: 1;`
       );
-      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
+      gradientElement.children[0].setAttribute("offset", smoothOffset(offset1));
 
       gradientElement.children[1].setAttribute(
         "style",
-        `stop-color: rgba(${color2.r}, ${color2.g}, ${color2.b}, 0.9); stop-opacity: 1;`
+        `stop-color: rgb(${colors[1].r}, ${colors[1].g}, ${colors[1].b}); stop-opacity: 1;`
       );
-      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
+      gradientElement.children[1].setAttribute("offset", smoothOffset(offset2));
 
       gradientElement.children[2].setAttribute(
         "style",
-        `stop-color: rgba(${color3.r}, ${color3.g}, ${color3.b}, 0.85); stop-opacity: 1;`
+        `stop-color: rgb(${colors[2].r}, ${colors[2].g}, ${colors[2].b}); stop-opacity: 1;`
       );
-      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
+      gradientElement.children[2].setAttribute("offset", smoothOffset(offset3));
 
       gradientElement.children[3].setAttribute(
         "style",
-        `stop-color: rgba(${color4.r}, ${color4.g}, ${color4.b}, 0.9); stop-opacity: 1;`
+        `stop-color: rgb(${colors[3].r}, ${colors[3].g}, ${colors[3].b}); stop-opacity: 1;`
       );
-      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+      gradientElement.children[3].setAttribute("offset", smoothOffset(offset4));
 
       gradientElement.children[4].setAttribute(
         "style",
-        `stop-color: rgba(${color5.r}, ${color5.g}, ${color5.b}, 0.95); stop-opacity: 1;`
+        `stop-color: rgb(${colors[4].r}, ${colors[4].g}, ${colors[4].b}); stop-opacity: 1;`
       );
-      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
+      gradientElement.children[4].setAttribute("offset", smoothOffset(offset5));
     });
+
+    // Apply shadow for dynamic 3D effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
+  });
+}
+
+// Helper function to start motion handling
+function startMotionHandler(callback) {
+  window.addEventListener("deviceorientation", (event) => {
+    const x = event.beta || 0; // Tilt front-to-back
+    const y = event.gamma || 0; // Tilt left-to-right
+    callback(x, y);
   });
 }
 
@@ -306,4 +300,59 @@ function RotateText() {
     document.getElementById("text"),
     splitter.splitGraphemes.bind(splitter)
   );
+}
+
+function startGradientEffect3() {
+  const gradientElements = document.querySelectorAll("#gradient3");
+
+  startMotionHandler((x, y) => {
+    // Normalize tilt values and scale sensitivity
+    let normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
+
+    // Adjust shadow for neon glow effect
+    // const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+
+    // Generate dynamic neon color
+    gradientElements.forEach((gradientElement, index) => {
+      let neonColor;
+      neonColor = {
+        r: Math.round(255 - normalizedX * 0), // Bright range for red
+        g: Math.round(18 + normalizedY * 155), // Bright range for green
+        b: Math.round(150 + normalizedX * 200), // Bright range for blue
+      };
+      // console.log(neonColor);
+      const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
+
+      // Apply dynamic neon glow using drop-shadow
+      //   svgElement.style.filter = `
+      //   drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
+      //   drop-shadow(0px 0px 30px ${neonGlowColor}),
+      //   drop-shadow(0px 0px 50px ${neonGlowColor})
+      // `;
+
+      // Apply neon effect to gradient colors dynamically
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", "10%");
+
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.8;`
+      );
+      gradientElement.children[1].setAttribute("offset", "50%");
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
+      );
+      gradientElement.children[2].setAttribute("offset", "90%");
+    });
+  });
 }
