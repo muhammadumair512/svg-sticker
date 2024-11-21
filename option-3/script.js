@@ -1,4 +1,5 @@
 window.addEventListener("load", () => {
+  startGradientEffect2();
   EnableVanta();
   RotateText();
 });
@@ -43,6 +44,7 @@ function initializeMotionAccess() {
       .then((response) => {
         if (response === "granted") {
           startGradientEffect();
+          startGradientEffect2();
         } else {
           alert("Permission to access motion data was denied.");
         }
@@ -50,6 +52,7 @@ function initializeMotionAccess() {
       .catch(console.error);
   } else {
     startGradientEffect();
+    startGradientEffect2();
   }
 }
 
@@ -170,7 +173,64 @@ function startGradientEffect() {
     );
   });
 }
+function startGradientEffect2() {
+  const gradientElements = document.querySelectorAll("#gradient2");
 
+  startMotionHandler((x, y) => {
+    // Normalize tilt values and scale sensitivity
+    const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
+
+    // Adjust shadow for dynamic 3D effect
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+
+    // Smooth gradient stop offsets with slight overlap for smooth transitions
+    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 12));
+    const offset2 = Math.min(100, Math.max(0, 25 + normalizedY * 8)); // Reduced spacing for smoother transitions
+    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 8));
+    const offset4 = Math.min(100, Math.max(0, 75 + normalizedY * 12));
+    const offset5 = 100;
+
+    // Static colors
+    const colors = ["#f05d83", "yellow", "#3c3c40", "#faacf9", "#824251"];
+
+    // Apply updated colors and offsets to gradient stops
+    gradientElements.forEach((gradientElement) => {
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: ${colors[0]}; stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
+
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: ${colors[1]}; stop-opacity: 1;`
+      );
+      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: ${colors[2]}; stop-opacity: 1;`
+      );
+      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
+
+      gradientElement.children[3].setAttribute(
+        "style",
+        `stop-color: ${colors[3]}; stop-opacity: 1;`
+      );
+      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+
+      gradientElement.children[4].setAttribute(
+        "style",
+        `stop-color: ${colors[4]}; stop-opacity: 1;`
+      );
+      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
+    });
+  });
+}
 function calculatePosition(degree, radius) {
   const radians = (degree - 60) * (Math.PI / 180);
   return {
