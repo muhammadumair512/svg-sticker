@@ -87,90 +87,91 @@ function startMotionHandler(onMotionUpdate) {
 }
 
 function startGradientEffect() {
-  const gradientElement = document.querySelector("#gradient1");
+  const gradientElements = document.querySelectorAll("#gradient1");
 
-  // Start the motion handler
   startMotionHandler((x, y) => {
-    // Normalize and scale tilt values
-    const normalizedX = x / 45; // Adjust to make changes more noticeable
-    const normalizedY = y / 45; // Adjust to make changes more noticeable
-    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
-    // shadow adjustments
-    const svgElement = document.querySelector("#svglogo");
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 10); // Scale as needed
-    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 10); // Scale as needed
-    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
-    const baseColor1 = { r: 255, g: 120, b: 90 }; // Vibrant red-orange
-    const baseColor2 = { r: 90, g: 180, b: 255 }; // Sky blue
-    const baseColor3 = { r: 120, g: 255, b: 150 }; // Bright green
-    const baseColor4 = { r: 255, g: 240, b: 120 }; // Vibrant yellow
+    // Normalize tilt values and scale sensitivity
+    const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
 
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
+
+    // Adjust shadow for dynamic 3D effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15); // Increased scale
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
+
+    // Smooth gradient stop offsets with slight overlap for smooth transitions
+
+    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 15));
+    const offset2 = Math.min(100, Math.max(0, 25 + normalizedY * 10)); // Reduced spacing for smoother transitions
+    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 10));
+    const offset4 = Math.min(100, Math.max(0, 75 + normalizedY * 15));
+    const offset5 = 100;
+    // Enhanced color interpolation for better blending
     const color1 = {
-      r: Math.min(255, baseColor1.r + normalizedX * 100),
-      g: Math.min(255, baseColor1.g + normalizedY * 100),
-      b: Math.max(0, baseColor1.b - normalizedX * 80),
+      r: Math.round(228 + Math.sin(normalizedX * Math.PI) * 10),
+      g: Math.round(14 + Math.sin(normalizedY * Math.PI) * 25),
+      b: Math.round(14 + Math.cos(normalizedX * Math.PI) * 35),
     };
 
     const color2 = {
-      r: Math.max(0, baseColor2.r - normalizedY * 90),
-      g: Math.min(255, baseColor2.g + normalizedX * 80),
-      b: Math.min(255, baseColor2.b + normalizedY * 100),
+      r: Math.round(9 + Math.cos(normalizedY * Math.PI) * 25),
+      g: Math.round(235 - Math.sin(normalizedX * Math.PI) * 25),
+      b: Math.round(156 + Math.sin(normalizedY * Math.PI) * 35),
     };
 
     const color3 = {
-      r: Math.min(255, baseColor3.r + normalizedY * 90),
-      g: Math.max(0, baseColor3.g - normalizedX * 100),
-      b: Math.min(255, baseColor3.b + normalizedX * 80),
+      r: Math.round(32 + Math.sin(normalizedX * Math.PI) * 15),
+      g: Math.round(18 + Math.cos(normalizedY * Math.PI) * 25),
+      b: Math.round(229 - Math.sin(normalizedX * Math.PI) * 35),
     };
 
     const color4 = {
-      r: Math.min(255, baseColor4.r + normalizedX * 50),
-      g: Math.min(255, baseColor4.g + normalizedY * 50),
-      b: Math.max(0, baseColor4.b - normalizedY * 50),
+      r: Math.round(192 + Math.cos(normalizedX * Math.PI) * 35),
+      g: Math.round(168 + Math.sin(normalizedY * Math.PI) * 25),
+      b: Math.round(168 - Math.cos(normalizedY * Math.PI) * 15),
     };
 
-    // Amplify offset shifts for more noticeable 3D motion
-    const offset1 = 20 + normalizedX * 20; // Offset for stop 1
-    const offset2 = 40 + normalizedY * 20; // Offset for stop 2
-    const offset3 = 60 + normalizedX * 20; // Offset for stop 3
-    const offset4 = 80 + normalizedY * 20; // Offset for stop 4
+    const color5 = {
+      r: Math.round(6 + Math.sin(normalizedY * Math.PI) * 35),
+      g: Math.round(54 - Math.cos(normalizedX * Math.PI) * 15),
+      b: Math.round(5 + Math.sin(normalizedX * Math.PI) * 25),
+    };
 
-    // Update gradient stops with new colors and offsets
-    gradientElement.children[0].setAttribute(
-      "style",
-      `stop-color: rgba(${color1.r}, ${color1.g}, ${color1.b}, 1); stop-opacity: 1;`
-    );
-    gradientElement.children[0].setAttribute(
-      "offset",
-      `${Math.min(100, offset1)}%`
-    );
+    // Apply updated colors and offsets to gradient stops
+    gradientElements.forEach((gradientElement) => {
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: rgba(${color1.r}, ${color1.g}, ${color1.b}, 0.95); stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", `${offset1}%`);
 
-    gradientElement.children[1].setAttribute(
-      "style",
-      `stop-color: rgba(${color2.r}, ${color2.g}, ${color2.b}, 1); stop-opacity: 0.9;`
-    );
-    gradientElement.children[1].setAttribute(
-      "offset",
-      `${Math.min(100, offset2)}%`
-    );
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: rgba(${color2.r}, ${color2.g}, ${color2.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[1].setAttribute("offset", `${offset2}%`);
 
-    gradientElement.children[2].setAttribute(
-      "style",
-      `stop-color: rgba(${color3.r}, ${color3.g}, ${color3.b}, 1); stop-opacity: 0.8;`
-    );
-    gradientElement.children[2].setAttribute(
-      "offset",
-      `${Math.min(100, offset3)}%`
-    );
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: rgba(${color3.r}, ${color3.g}, ${color3.b}, 0.85); stop-opacity: 1;`
+      );
+      gradientElement.children[2].setAttribute("offset", `${offset3}%`);
 
-    gradientElement.children[3].setAttribute(
-      "style",
-      `stop-color: rgba(${color4.r}, ${color4.g}, ${color4.b}, 1); stop-opacity: 0.7;`
-    );
-    gradientElement.children[3].setAttribute(
-      "offset",
-      `${Math.min(100, offset4)}%`
-    );
+      gradientElement.children[3].setAttribute(
+        "style",
+        `stop-color: rgba(${color4.r}, ${color4.g}, ${color4.b}, 0.9); stop-opacity: 1;`
+      );
+      gradientElement.children[3].setAttribute("offset", `${offset4}%`);
+
+      gradientElement.children[4].setAttribute(
+        "style",
+        `stop-color: rgba(${color5.r}, ${color5.g}, ${color5.b}, 0.95); stop-opacity: 1;`
+      );
+      gradientElement.children[4].setAttribute("offset", `${offset5}%`);
+    });
   });
 }
 function startGradientEffect2() {

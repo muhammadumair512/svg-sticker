@@ -74,9 +74,9 @@
 #border {
   position: absolute;
   z-index: -6;
-  width: 110%;
-  height: 110%;
-  margin: -5.3% auto auto -5.6%;
+  width: 105%;
+  height: 105%;
+  margin: -2.3% auto auto -2.6%;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -141,6 +141,7 @@
 }
 /* .narrowBorder {
   position: absolute;
+  background: url(#gradient2);
   z-index: 2;
   width: 95%;
   height: 95%;
