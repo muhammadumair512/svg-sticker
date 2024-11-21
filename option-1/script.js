@@ -155,7 +155,7 @@ function startGradientEffect() {
         g: Math.round(100 + normalizedY * 155), // Bright range for green
         b: Math.round(200 + normalizedX * 55), // Bright range for blue
       };
-      console.log(neonColor);
+      // console.log(neonColor);
       const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
 
       // Apply dynamic neon glow using drop-shadow
@@ -206,11 +206,10 @@ function startGradientEffect2() {
       let neonColor;
       neonColor = {
         r: Math.round(255 - normalizedX * 0), // Bright range for red
-        g: Math.round(128 + normalizedY * 128), // Bright range for purple
-        b: Math.round(150 + normalizedX * 25), // Bright range for yellow
-        // b: Math.round(53 + normalizedX * 200), // Bright range for blue
+        g: Math.round(18 + normalizedY * 155), // Bright range for green
+        b: Math.round(150 + normalizedX * 200), // Bright range for blue
       };
-      console.log(neonColor);
+      // console.log(neonColor);
       const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
 
       // Apply dynamic neon glow using drop-shadow
