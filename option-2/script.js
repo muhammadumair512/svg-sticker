@@ -169,6 +169,15 @@ function startMotionHandler(callback) {
   });
 }
 
+// Helper function to start motion handling
+function startMotionHandler(callback) {
+  window.addEventListener("deviceorientation", (event) => {
+    const x = event.beta || 0; // Tilt front-to-back
+    const y = event.gamma || 0; // Tilt left-to-right
+    callback(x, y);
+  });
+}
+
 function startGradientEffect2() {
   const gradientElements = document.querySelectorAll("#gradient2");
 
