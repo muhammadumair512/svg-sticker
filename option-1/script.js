@@ -50,6 +50,7 @@ window.addEventListener("load", () => {
   Marqueeltr(".text8", 0.7);
   Marqueeltr(".text10", 0.7);
   Marqueeltr(".text12", 0.7);
+  startGradientEffect2();
 });
 
 const gradientElement = document.querySelector("#gradient1");
@@ -148,19 +149,65 @@ function startGradientEffect() {
 
     // Generate dynamic neon color
     gradientElements.forEach((gradientElement, index) => {
-      index == 1 ? (normalizedX = normalizedX + 1) : normalizedX;
-      index == 1 ? (normalizedY = normalizedY + 1) : normalizedY;
-      // if (index === 0) {
-      //   normalizedX = normalizedX + 1;
-      //   normalizedY = normalizedY + 1;
-      // }
-      console.log(normalizedX);
-      console.log(normalizedY);
       let neonColor;
       neonColor = {
         r: Math.round(255 - normalizedX * 128), // Bright range for red
         g: Math.round(100 + normalizedY * 155), // Bright range for green
         b: Math.round(200 + normalizedX * 55), // Bright range for blue
+      };
+      console.log(neonColor);
+      const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
+
+      // Apply dynamic neon glow using drop-shadow
+      svgElement.style.filter = `
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
+      drop-shadow(0px 0px 30px ${neonGlowColor}),
+      drop-shadow(0px 0px 50px ${neonGlowColor})
+    `;
+
+      // Apply neon effect to gradient colors dynamically
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", "10%");
+
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.8;`
+      );
+      gradientElement.children[1].setAttribute("offset", "50%");
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
+      );
+      gradientElement.children[2].setAttribute("offset", "90%");
+    });
+  });
+}
+function startGradientEffect2() {
+  const gradientElements = document.querySelectorAll("#gradient2");
+
+  startMotionHandler((x, y) => {
+    // Normalize tilt values and scale sensitivity
+    let normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
+
+    // Adjust shadow for neon glow effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+
+    // Generate dynamic neon color
+    gradientElements.forEach((gradientElement, index) => {
+      let neonColor;
+      neonColor = {
+        r: Math.round(245 - normalizedX * 128), // Bright range for red
+        g: Math.round(95 + normalizedY * 155), // Bright range for green
+        b: Math.round(150 + normalizedX * 55), // Bright range for blue
       };
       console.log(neonColor);
       const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
