@@ -204,8 +204,6 @@ function startGradientEffect2() {
     // Generate dynamic neon color
     gradientElements.forEach((gradientElement, index) => {
       let neonColor;
-      normalizedX = normalizedX * 8;
-      normalizedY = normalizedY * 5;
       neonColor = {
         r: Math.round(255 - normalizedX * 0), // Bright range for red
         g: Math.round(18 + normalizedY * 155), // Bright range for green
