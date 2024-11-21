@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// marquee gradient
+// Function to update gradient based on device orientation
 // Initialize variables for tilt values
 let tiltX = 0;
 let tiltY = 0;
@@ -233,16 +233,13 @@ let gradientAngle = 45; // Default angle
 
 // Function to update gradient based on device orientation
 function updateGradient() {
+  // Apply the gradient direction based on tilt
   const gradientDirection = `linear-gradient(${gradientAngle}deg, #ff7eb3, #ff758c, #f9d423, #ff4e50)`;
 
   // Apply the gradient to each marquee-text element
   document.querySelectorAll(".marquee-text").forEach((element) => {
-    // Apply gradient background and ensure text is transparent
+    // Update the background gradient dynamically
     element.style.background = gradientDirection;
-    element.style.backgroundSize = "400% 400%";
-    element.style.webkitBackgroundClip = "text"; // Chrome, Safari
-    element.style.backgroundClip = "text"; // Firefox
-    element.style.color = "transparent"; // Make text transparent so gradient shows
   });
 }
 
@@ -259,7 +256,7 @@ function handleOrientation(event) {
     // Calculate gradient angle based on tilt
     gradientAngle = (tiltX + 90) % 360; // Adjust the tilt for desired angle
 
-    // Update the gradient
+    // Update the gradient direction based on tilt
     updateGradient();
   }
 }

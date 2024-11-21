@@ -92,33 +92,14 @@
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-size: 8px;
   white-space: nowrap;
-  color: rgba(18, 1, 1, 0.206);
+  color: rgba(18, 1, 1, 0.206); /* Default text color */
 
-  /* Apply gradient animation to text */
-  background: linear-gradient(
-    45deg,
-    #ff7eb3,
-    #ff758c,
-    #f9d423,
-    #ff4e50
-  ); /* Example gradient */
-  background-size: 400% 400%;
-  -webkit-background-clip: text; /* Chrome, Safari */
-  background-clip: text; /* Firefox */
-  color: transparent; /* Make text transparent to show background */
-  /* animation: gradientMove 5s ease infinite; */
-}
-
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  /* Apply gradient as default background but without animation */
+  background: linear-gradient(45deg, #ff7eb3, #ff758c, #f9d423, #ff4e50);
+  background-size: 400% 400%; /* Ensure the gradient is large enough to move */
+  background-clip: text; /* Clip the gradient to the text */
+  color: transparent; /* Make text transparent to show the gradient */
+  transition: background 0.2s ease; /* Smooth transition for gradient change */
 }
 
 .marquee-text h7 {
