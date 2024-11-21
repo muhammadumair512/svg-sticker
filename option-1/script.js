@@ -152,7 +152,7 @@ function startGradientEffect() {
       let neonColor;
       neonColor = {
         r: Math.round(255 - normalizedX * 128), // Bright range for red
-        g: Math.round(100 + normalizedY * 155), // Bright range for green
+        g: Math.round(100 + normalizedY * 255), // Bright range for green
         b: Math.round(200 + normalizedX * 55), // Bright range for blue
       };
       // console.log(neonColor);
