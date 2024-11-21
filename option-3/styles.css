@@ -90,9 +90,9 @@
   padding: 0;
   box-shadow: 0 4px 6px rgba(94, 198, 239, 0.9);
   text-align: center;
-  width: 130px;
+  width: 127px;
   height: 28px !important;
-  margin: 40.5% auto auto 6.5%;
+  margin: 40.5% auto auto 8%;
 
   background-color: rgba(255, 255, 255, 0.7); /* More transparent fallback */
   border-top: 1px black solid;
@@ -162,9 +162,48 @@
   position: absolute;
   background: url(#gradient2);
   z-index: 2;
-  width: 95%;
-  height: 95%;
-  margin: 2% auto auto 2.5%;
+  width: 88%;
+  height: 88%;
+  margin: 5.5% auto auto 5.9%;
   border-radius: 50%;
-  border: solid 9px #138d6f;
+  border: solid 3px #138d6f;
 } */
+.narrowBorder {
+  position: absolute;
+  background: url(#gradient2);
+  z-index: 2;
+  width: 88%;
+  height: 88%;
+  margin: 5.5% auto auto 5.9%;
+  border-radius: 50%; /* Circular shape */
+  overflow: hidden; /* Ensures pseudo-element stays within bounds */
+}
+
+.narrowBorder::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* Matches parent circle */
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.1)
+  ); /* Glass-like gradient */
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  mask: radial-gradient(
+    circle,
+    transparent calc(65% - 0px),
+    /* Inner edge */ black calc(65% + 0px) /* Outer edge */
+  ); /* Ensures the border is ~0.6px thick */
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent calc(65% - 0px),
+    black calc(65% + 0px)
+  ); /* Webkit mask for Safari */
+  pointer-events: none; /* Prevent interaction */
+  z-index: 1;
+}
