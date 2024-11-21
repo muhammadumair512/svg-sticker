@@ -222,71 +222,44 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Vanta initialization error:", error);
   }
 });
+// Initialize variables for tilt values and gradient angle
+let gradientAngle = 45; // Default gradient angle
 
-// Initialize variables for tilt values
-let tiltX = 0;
-let tiltY = 0;
-
-// Set initial gradient angle
-let gradientAngle = 45; // Default angle
-
-// Function to update gradient based on device orientation
+// Function to update the gradient dynamically
 function updateGradient() {
-  // Calculate the gradient direction based on the tilt
-  const gradientDirection = `linear-gradient(${85}deg, #ff7eb3, #ff758c, #f9d423, #ff4e50)`;
+  // Create a new gradient direction based on the current angle
+  const gradientDirection = `linear-gradient(${gradientAngle}deg, #ff7eb3, #ff758c, #f9d423, #ff4e50)`;
 
-  // Select all h7 tags inside the marquee-text class
+  // Apply the gradient direction to each h7 element inside .marquee-text
   document.querySelectorAll(".marquee-text h7").forEach((element) => {
-    // Apply the gradient to the background of the text
     element.style.backgroundImage = gradientDirection;
-
-    // Ensure the gradient clips only to the text
-    element.style.webkitBackgroundClip = "text"; // For WebKit browsers
-    element.style.backgroundClip = "text"; // For other browsers
-
-    // Ensure the text color is transparent to reveal the gradient
-    element.style.color = "transparent";
-
-    // Optional: Prevent gradients from affecting the container
-    element.style.backgroundRepeat = "no-repeat";
-    element.style.backgroundSize = "200% 200%"; // Make the gradient large enough for smooth transitions
   });
 }
 
-// Handle device tilt (orientation) changes
+// Function to handle device tilt (orientation) changes
 function handleOrientation(event) {
-  if (event && event.beta && event.gamma) {
-    // beta is the front-to-back tilt (-180 to 180)
-    // gamma is the left-to-right tilt (-90 to 90)
+  if (event && event.beta !== null && event.gamma !== null) {
+    // `beta` is front-to-back tilt (-180 to 180)
+    // `gamma` is left-to-right tilt (-90 to 90)
 
-    // Normalize tilt values to a range for gradient angle (0 to 360 degrees)
-    tiltX = event.gamma; // left-right tilt
-    tiltY = event.beta; // front-back tilt
+    // Normalize values for gradient angle calculation
+    const tiltX = event.gamma; // Left-to-right tilt
+    const tiltY = event.beta; // Front-to-back tilt
 
-    // Calculate gradient angle based on tilt
-    gradientAngle = (tiltX + 90) % 360; // Adjust the tilt for desired angle
+    // Map tilt values to gradient angles (0 to 360 degrees)
+    gradientAngle = Math.round((tiltX + 90) % 360);
 
-    // Update the gradient direction based on tilt
+    // Update the gradient based on the new angle
     updateGradient();
   }
 }
 
-// For iOS devices, use the 'orientationchange' event
-function handleOrientationChange() {
-  if (window.orientation !== undefined) {
-    tiltX = window.orientation;
-    gradientAngle = (tiltX + 90) % 360;
-    updateGradient();
-  }
-}
-
-// Listen for device orientation events (for mobile devices)
+// Add event listener for device orientation
 if (window.DeviceOrientationEvent) {
-  window.addEventListener("deviceorientation", handleOrientation, false);
-} else if (window.orientation !== undefined) {
-  // Fallback for iOS
-  window.addEventListener("orientationchange", handleOrientationChange, false);
+  window.addEventListener("deviceorientation", handleOrientation, true);
+} else {
+  console.log("DeviceOrientationEvent is not supported on this device.");
 }
 
-// Ensure the gradient is initialized
+// Initialize the gradient on page load
 // updateGradient();
