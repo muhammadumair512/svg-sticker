@@ -1,6 +1,6 @@
 window.addEventListener("load", () => {
   startGradientEffect2();
-  updateGradient();
+  handleOrientation();
 });
 
 const gradientElement = document.querySelector("#gradient1");
