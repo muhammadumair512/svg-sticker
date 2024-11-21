@@ -145,7 +145,7 @@ function startGradientEffect2() {
   // Function to update the gradient's rotation
   const updateGradientRotation = (angle) => {
     // Rotate by 120° (two steps to the right) + dynamic tilt angle
-    const baseRotation = 120; // Two steps to the right = 120°
+    const baseRotation = 90; // Two steps to the right = 120°
     const totalRotation = baseRotation + angle;
     gradientElement.setAttribute(
       "gradientTransform",

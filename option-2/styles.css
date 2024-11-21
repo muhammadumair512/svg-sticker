@@ -155,9 +155,9 @@ svg {
 
 .text {
   word-spacing: 4px;
-  color: rgba(18, 1, 1, 0.15);
+  color: rgba(242, 5, 5, 0.8);
 
-  font-size: 10px;
+  font-size: 8px;
 
   position: absolute;
   margin: auto auto auto auto;
@@ -170,7 +170,7 @@ svg {
 
 @layer demo {
   .text {
-    text-shadow: 0 0.15ch 15px var(--shadow), 0 -1px 0 var(--highlight);
+    text-shadow: 0 0.15ch 15px var(--shadow), 0 -0.4px 0 var(--highlight);
   }
 }
 
@@ -182,7 +182,4 @@ svg {
     --shadow: oklch(25% 0.2 var(--hue));
     --highlight: oklch(98% 0.05 var(--hue));
   }
-}
-p {
-  color: rgb(255, 255, 0);
 }
