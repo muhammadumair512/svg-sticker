@@ -183,3 +183,6 @@ svg {
     --highlight: oklch(98% 0.05 var(--hue));
   }
 }
+p {
+  color: rgb(255, 255, 0);
+}
