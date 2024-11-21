@@ -223,7 +223,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Function to update gradient based on device orientation
 // Initialize variables for tilt values
 let tiltX = 0;
 let tiltY = 0;
@@ -233,13 +232,24 @@ let gradientAngle = 45; // Default angle
 
 // Function to update gradient based on device orientation
 function updateGradient() {
-  // Apply the gradient direction based on tilt
-  const gradientDirection = `linear-gradient(${gradientAngle}deg, #ff7eb3, #ff758c, #f9d423, #ff4e50)`;
+  // Calculate the gradient direction based on the tilt
+  const gradientDirection = `linear-gradient(${85}deg, #ff7eb3, #ff758c, #f9d423, #ff4e50)`;
 
-  // Apply the gradient to each marquee-text element
-  document.querySelectorAll(".marquee-text").forEach((element) => {
-    // Update the background gradient dynamically
-    element.style.background = gradientDirection;
+  // Select all h7 tags inside the marquee-text class
+  document.querySelectorAll(".marquee-text h7").forEach((element) => {
+    // Apply the gradient to the background of the text
+    element.style.backgroundImage = gradientDirection;
+
+    // Ensure the gradient clips only to the text
+    element.style.webkitBackgroundClip = "text"; // For WebKit browsers
+    element.style.backgroundClip = "text"; // For other browsers
+
+    // Ensure the text color is transparent to reveal the gradient
+    element.style.color = "transparent";
+
+    // Optional: Prevent gradients from affecting the container
+    element.style.backgroundRepeat = "no-repeat";
+    element.style.backgroundSize = "200% 200%"; // Make the gradient large enough for smooth transitions
   });
 }
 
