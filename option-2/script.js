@@ -104,7 +104,7 @@ function startGradientEffect() {
     const offset2 = Math.min(100, Math.max(0, 25 + normalizedY * 15)); // Reduced spacing for smoother transitions
     const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 15));
     const offset4 = Math.min(100, Math.max(0, 75 + normalizedY * 15));
-    const offset5 = 100;
+    const offset5 = 50;
 
     // Enhanced color interpolation for better blending
     const color1 = {
