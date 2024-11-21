@@ -205,10 +205,10 @@ function startGradientEffect2() {
     gradientElements.forEach((gradientElement, index) => {
       let neonColor;
       neonColor = {
-        r: Math.round(106 - normalizedX * 67), // Bright range for red
-        g: Math.round(95 + normalizedY * 3), // Bright range for green
-        // b: Math.round(150 + normalizedX * 25), // Bright range for blue
-        b: Math.round(53 + normalizedX * 200), // Bright range for blue
+        r: Math.round(255 - normalizedX * 0), // Bright range for red
+        g: Math.round(128 + normalizedY * 128), // Bright range for purple
+        b: Math.round(150 + normalizedX * 25), // Bright range for yellow
+        // b: Math.round(53 + normalizedX * 200), // Bright range for blue
       };
       console.log(neonColor);
       const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
