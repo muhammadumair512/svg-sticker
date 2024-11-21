@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Holographic Neon Effect</title>
+    <style>
+      :root {
+        --bg: #0a0a0a;
+        --line: #ff00ff; /* Neon Pink */
+        --fill: #00ffff; /* Cyan */
+        --text: #ffffff;
+        --subtext: #ffcc00; /* Bright Yellow */
+        --gradient1: rgba(255, 0, 255, 1); /* Bright Magenta */
+        --gradient2: rgba(0, 255, 255, 1); /* Bright Cyan */
+        --gradient3: rgba(255, 255, 0, 0.8); /* Yellow */
+        --gradient4: rgba(255, 0, 0, 0.8); /* Red */
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(45deg, #333 40%, #ddd 60%, #333);
+        color: var(--text);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+
+      .frame--sticker {
+        position: relative;
+        width: 300px;
+        height: 300px;
+      }
+
+      .mask {
+        background: black;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-image: url("./hologram.png"); /* Replace with your .png file */
+        background-repeat: no-repeat;
+        background-size: 45%;
+        background-position: center;
+        z-index: 1;
+        mix-blend-mode: multiply;
+      }
+
+      .mask::before,
+      .mask::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--gradient1), var(--gradient2));
+        background-size: 400%;
+        mix-blend-mode: color-burn;
+        animation: moveGradient 4s infinite alternate;
+      }
+
+      .mask::after {
+        background: linear-gradient(
+          -135deg,
+          var(--gradient3),
+          var(--gradient4)
+        );
+        opacity: 0.9;
+      }
+
+      .specular {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 20%,
+          transparent 80%
+        );
+        mix-blend-mode: screen;
+        opacity: 0.8;
+        animation: pulse 2s infinite ease-in-out;
+      }
+
+      /* Neon stroke effect */
+      .neon-text {
+        position: absolute;
+        top: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--text);
+        text-shadow: 0 0 15px var(--fill), 0 0 30px var(--fill),
+          0 0 40px var(--line), 0 0 50px var(--subtext), 0 0 60px var(--subtext);
+      }
+
+      /* Animations */
+      @keyframes moveGradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        100% {
+          background-position: 100% 50%;
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame--sticker">
+      <div class="mask"></div>
+      <div class="specular"></div>
+      <div class="neon-text">Holographic Neon Effect</div>
+    </div>
+  </body>
+</html>
