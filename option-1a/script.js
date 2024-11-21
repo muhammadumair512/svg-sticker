@@ -1,6 +1,13 @@
 window.addEventListener("load", () => {
   startGradientEffect2();
   updateGradient();
+  const h7Elements = document.querySelectorAll(".marquee-text h7");
+
+  h7Elements.forEach((element, index) => {
+    // Apply different translateX values based on the index
+    const translateValue = -15 * (index + 2); // Adjust the multiplier for spacing
+    element.style.transform = `translateX(${translateValue}px)`;
+  });
 });
 
 const gradientElement = document.querySelector("#gradient1");
@@ -81,7 +88,6 @@ function startMotionHandler(onMotionUpdate) {
     alert("Device orientation not supported on this device/browser.");
   }
 }
-let gradientAngle;
 function startGradientEffect() {
   const gradientElements = document.querySelectorAll("#gradient1");
 
@@ -91,7 +97,6 @@ function startGradientEffect() {
     let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
-    gradientAngle = Math.round((angle + 90) % 360);
 
     // Adjust shadow for neon glow effect
     const svgElement = document.querySelector("#svglogo");
@@ -224,16 +229,49 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 // Initialize variables for tilt values and gradient angle
+// Initialize variables for tilt values and gradient angle
+let gradientAngle = 45; // Default gradient angle
 
 // Function to update the gradient dynamically
 function updateGradient() {
   // Create a new gradient direction based on the current angle
-  const gradientDirection = `linear-gradient(${gradientAngle}deg, #ff7eb3, #ff758c, #f9d423, #ff4e50)`;
+  const gradientDirection = `linear-gradient(${gradientAngle}deg, 
+    #ff0000, #ff7300, #ffee00, #0eff00, #00aaff, #ff00ff)`;
 
   // Apply the gradient direction to each h7 element inside .marquee-text
   document.querySelectorAll(".marquee-text h7").forEach((element) => {
     element.style.backgroundImage = gradientDirection;
+    element.style.webkitBackgroundClip = "text";
+    element.style.backgroundClip = "text";
+    element.style.color = "transparent";
   });
 }
 
 // Function to handle device tilt (orientation) changes
+function handleOrientation(event) {
+  alert(gradientAngle);
+  if (event && event.beta !== null && event.gamma !== null) {
+    // `beta` is front-to-back tilt (-180 to 180)
+    // `gamma` is left-to-right tilt (-90 to 90)
+
+    // Normalize values for gradient angle calculation
+    const tiltX = event.gamma; // Left-to-right tilt
+    const tiltY = event.beta; // Front-to-back tilt
+
+    // Map tilt values to gradient angles (0 to 360 degrees)
+    gradientAngle = Math.round((tiltX + tiltY + 180) % 360);
+
+    // Update the gradient based on the new angle
+    updateGradient();
+  }
+}
+
+// Add event listener for device orientation
+if (window.DeviceOrientationEvent) {
+  window.addEventListener("deviceorientation", handleOrientation, true);
+} else {
+  console.log("DeviceOrientationEvent is not supported on this device.");
+}
+
+// Initialize the gradient on page load
+updateGradient();

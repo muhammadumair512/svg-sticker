@@ -98,10 +98,11 @@
 
 /* Apply gradient only to text, using background-clip */
 .marquee-text h7 {
+  /* transform: translateX(-150px); */
   display: inline-block;
   text-transform: uppercase;
   font-weight: bold;
-  background: linear-gradient(45deg, #ff7eb3, #ff758c, #f9d423, #ff4e50);
+  background: linear-gradient(45deg, red 40%, purple 60%, yellow);
   background-size: 400% 400%; /* Ensure the gradient is large enough to move */
   -webkit-background-clip: text; /* Chrome, Safari */
   background-clip: text; /* Firefox */
