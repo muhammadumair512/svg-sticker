@@ -100,11 +100,11 @@ function startGradientEffect() {
     svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
 
     // Smooth gradient stop offsets with slight overlap for smooth transitions
-    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 12));
-    const offset2 = Math.min(100, Math.max(0, 25 + normalizedY * 15)); // Reduced spacing for smoother transitions
-    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 15));
-    const offset4 = Math.min(100, Math.max(0, 75 + normalizedY * 15));
-    const offset5 = 50;
+    const offset1 = Math.min(100, Math.max(0, 10 + normalizedX * 7));
+    const offset2 = Math.min(100, Math.max(0, 25 + normalizedY * 8)); // Reduced spacing for smoother transitions
+    const offset3 = Math.min(100, Math.max(0, 50 + normalizedX * 8));
+    const offset4 = Math.min(100, Math.max(0, 75 + normalizedY * 8));
+    const offset5 = 100;
 
     // Enhanced color interpolation for better blending
     const color1 = {
