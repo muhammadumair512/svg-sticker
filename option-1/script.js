@@ -136,8 +136,8 @@ function startGradientEffect() {
 
   startMotionHandler((x, y) => {
     // Normalize tilt values and scale sensitivity
-    const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
-    const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+    let normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
@@ -148,13 +148,21 @@ function startGradientEffect() {
 
     // Generate dynamic neon color
     gradientElements.forEach((gradientElement, index) => {
-      let neonColor = {
+      index == 1 ? (normalizedX = normalizedX + 1) : normalizedX;
+      index == 1 ? (normalizedY = normalizedY + 1) : normalizedY;
+      // if (index === 0) {
+      //   normalizedX = normalizedX + 1;
+      //   normalizedY = normalizedY + 1;
+      // }
+      console.log(normalizedX);
+      console.log(normalizedY);
+      let neonColor;
+      neonColor = {
         r: Math.round(255 - normalizedX * 128), // Bright range for red
         g: Math.round(100 + normalizedY * 155), // Bright range for green
         b: Math.round(200 + normalizedX * 55), // Bright range for blue
       };
-      neonColor = neonColor - index * 0.5;
-
+      console.log(neonColor);
       const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
 
       // Apply dynamic neon glow using drop-shadow
