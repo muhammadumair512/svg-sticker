@@ -93,7 +93,7 @@ function startGradientEffect() {
   const svgElement = document.querySelector("#svglogo");
   const gradientElement = document.querySelector("#gradient1");
 
-  // Function to update gradient rotation
+  // Function to update the gradient's rotation
   const updateGradientRotation = (angle) => {
     gradientElement.setAttribute(
       "gradientTransform",
@@ -101,7 +101,7 @@ function startGradientEffect() {
     );
   };
 
-  // Handle device orientation changes
+  // Function to handle device orientation changes
   const startMotionHandler = (callback) => {
     window.addEventListener("deviceorientation", (event) => {
       const x = event.beta || 0; // Tilt front-to-back
@@ -111,18 +111,13 @@ function startGradientEffect() {
   };
 
   startMotionHandler((x, y) => {
-    // Calculate rotation angle based on tilt
+    // Calculate the rotation angle based on tilt
     const normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
     const normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
 
-    // Smoothly update gradient rotation
+    // Update gradient rotation dynamically
     updateGradientRotation(angle);
-
-    // Optional: Add dynamic shadow based on tilt
-    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
-    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
-    svgElement.style.filter = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px rgba(0, 0, 0, 0.5))`;
   });
 }
 
