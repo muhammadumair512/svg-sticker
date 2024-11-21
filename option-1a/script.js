@@ -91,7 +91,7 @@ function startGradientEffect() {
     let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
 
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
-    gradientAngle = Math.round((tiltX + 90) % 360);
+    gradientAngle = Math.round((angle + 90) % 360);
 
     // Adjust shadow for neon glow effect
     const svgElement = document.querySelector("#svglogo");
