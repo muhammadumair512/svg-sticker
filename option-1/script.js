@@ -214,10 +214,10 @@ function startGradientEffect2() {
 
       // Apply dynamic neon glow using drop-shadow
       svgElement.style.filter = `
-      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
-      drop-shadow(0px 0px 30px ${neonGlowColor}),
-      drop-shadow(0px 0px 50px ${neonGlowColor})
-    `;
+        drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
+        drop-shadow(0px 0px 30px ${neonGlowColor}),
+        drop-shadow(0px 0px 50px ${neonGlowColor})
+      `;
 
       // Apply neon effect to gradient colors dynamically
       gradientElement.children[0].setAttribute(
@@ -236,7 +236,7 @@ function startGradientEffect2() {
         "style",
         `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
       );
-      gradientElement.children[2].setAttribute("offset", "90%");
+      gradientElement.children[2].setAttribute("offset", "100%");
     });
   });
 }

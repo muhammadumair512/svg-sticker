@@ -1,6 +1,8 @@
 window.addEventListener("load", () => {
   startGradientEffect2();
   startGradientEffect3();
+  startGradientEffect4();
+  startGradientEffect5();
   EnableVanta();
   RotateText();
 });
@@ -47,6 +49,8 @@ function initializeMotionAccess() {
           startGradientEffect();
           startGradientEffect2();
           startGradientEffect3();
+          startGradientEffect4();
+          startGradientEffect5();
         } else {
           alert("Permission to access motion data was denied.");
         }
@@ -56,6 +60,8 @@ function initializeMotionAccess() {
     startGradientEffect();
     startGradientEffect2();
     startGradientEffect3();
+    startGradientEffect4();
+    startGradientEffect5();
   }
 }
 
@@ -354,7 +360,109 @@ function startGradientEffect3() {
         "style",
         `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
       );
+      gradientElement.children[2].setAttribute("offset", "100%");
+    });
+  });
+}
+function startGradientEffect4() {
+  const gradientElements = document.querySelectorAll("#gradient4");
+
+  startMotionHandler((x, y) => {
+    // Normalize tilt values and scale sensitivity
+    let normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
+
+    // Adjust shadow for neon glow effect
+    const svgElement = document.querySelector("#svglogo");
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+
+    // Generate dynamic neon color
+    gradientElements.forEach((gradientElement, index) => {
+      let neonColor;
+      neonColor = {
+        r: Math.round(255 - normalizedX * 128), // Bright range for red
+        g: Math.round(100 + normalizedY * 255), // Bright range for green
+        b: Math.round(200 + normalizedX * 55), // Bright range for blue
+      };
+      // console.log(neonColor);
+      const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
+
+      // Apply dynamic neon glow using drop-shadow
+      svgElement.style.filter = `
+      drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 10px ${neonGlowColor}),
+      drop-shadow(0px 0px 30px ${neonGlowColor}),
+      drop-shadow(0px 0px 50px ${neonGlowColor})
+    `;
+
+      // Apply neon effect to gradient colors dynamically
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", "10%");
+
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.8;`
+      );
+      gradientElement.children[1].setAttribute("offset", "50%");
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
+      );
       gradientElement.children[2].setAttribute("offset", "90%");
+    });
+  });
+}
+function startGradientEffect5() {
+  const gradientElements = document.querySelectorAll("#gradient5");
+
+  startMotionHandler((x, y) => {
+    // Normalize tilt values and scale sensitivity
+    let normalizedX = Math.max(-1, Math.min(1, x / 45)); // Range [-1, 1]
+    let normalizedY = Math.max(-1, Math.min(1, y / 45)); // Range [-1, 1]
+
+    const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
+
+    // Adjust shadow for neon glow effect
+    const shadowOffsetX = Math.round(Math.cos((angle * Math.PI) / 180) * 15);
+    const shadowOffsetY = Math.round(Math.sin((angle * Math.PI) / 180) * 15);
+
+    // Generate dynamic neon color
+    gradientElements.forEach((gradientElement, index) => {
+      let neonColor;
+      neonColor = {
+        r: Math.round(255 - normalizedX * 128), // Bright range for red
+        g: Math.round(100 + normalizedY * 255), // Bright range for green
+        b: Math.round(200 + normalizedX * 55), // Bright range for blue
+      };
+      // console.log(neonColor);
+      const neonGlowColor = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, 0.9)`;
+
+      // Apply dynamic neon glow using drop-shadow
+
+      // Apply neon effect to gradient colors dynamically
+      gradientElement.children[0].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 1;`
+      );
+      gradientElement.children[0].setAttribute("offset", "10%");
+
+      gradientElement.children[1].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.8;`
+      );
+      gradientElement.children[1].setAttribute("offset", "50%");
+
+      gradientElement.children[2].setAttribute(
+        "style",
+        `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
+      );
+      gradientElement.children[2].setAttribute("offset", "100%");
     });
   });
 }

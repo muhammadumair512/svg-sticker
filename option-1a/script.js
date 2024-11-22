@@ -192,7 +192,7 @@ function startGradientEffect2() {
         "style",
         `stop-color: ${neonGlowColor}; stop-opacity: 0.6;`
       );
-      gradientElement.children[2].setAttribute("offset", "90%");
+      gradientElement.children[2].setAttribute("offset", "100%");
     });
   });
 }
