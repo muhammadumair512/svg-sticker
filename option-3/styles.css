@@ -128,10 +128,10 @@
 }
 
 .text {
-  word-spacing: 4px;
+  word-spacing: 7.5px;
   color: rgba(247, 7, 7, 0.6);
 
-  font-size: 12.5px;
+  font-size: 11px;
 
   position: absolute;
   margin: auto auto auto auto;
